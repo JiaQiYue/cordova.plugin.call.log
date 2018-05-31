@@ -8,7 +8,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CallLog;
-import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -89,7 +89,7 @@ public class CallLogPlugin extends CordovaPlugin {
             Uri uri = CallLog.Calls.CONTENT_URI;
             String[] projection = new String[]{CallLog.Calls.NUMBER, CallLog.Calls.DATE,
                     CallLog.Calls.TYPE, CallLog.Calls.CACHED_NAME, CallLog.Calls.DURATION, CallLog.Calls.GEOCODED_LOCATION};
-            if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
             }
             Cursor cursor = cr.query(uri, projection, null, null, CallLog.Calls.DATE + " DESC");
             while (cursor.moveToNext()) {
