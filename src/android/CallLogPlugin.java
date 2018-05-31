@@ -172,8 +172,9 @@ public class CallLogPlugin extends CordovaPlugin {
         }
 
         // 将JSONArray转换得到String
-        //        String callLogInfos = jsonArray.toString();
-        //        Toast.makeText(activity,callLogInfos,Toast.LENGTH_LONG).show();
+        // String callLogInfos = jsonArray.toString();
+		
+        // Toast.makeText(activity,callLogInfos,Toast.LENGTH_LONG).show();
 
         return jsonArray;
 
