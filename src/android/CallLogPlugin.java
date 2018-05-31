@@ -162,7 +162,6 @@ public class CallLogPlugin extends CordovaPlugin {
         JSONArray jsonArray = new JSONArray();
         JSONObject tmpObj = null;
         int count = callInfoList.size();
-
         for (int i = 0; i < count; i++) {
             tmpObj = new JSONObject();
             tmpObj.put("CallDate", TransitionTime.convertTimeFirstStyle(callInfoList.get(i).getDate()));
