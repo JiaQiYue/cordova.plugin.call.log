@@ -10,4 +10,4 @@ callLog.getCallLog(callNumber, function (success) {
 
 结果:
 
-  [{"CallDate":"2018-05-31","Duration":"7"}]
+  [{"CallDate":"","Duration":""}]
