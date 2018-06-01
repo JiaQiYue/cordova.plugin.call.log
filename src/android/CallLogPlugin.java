@@ -53,7 +53,6 @@ public class CallLogPlugin extends CordovaPlugin {
         if (action.equals("getCallLog")) {
             callNumber = args.getString(0);
             initData(callNumber);
-            callbackContext.success(toJsonArray(callInfoList));
             return true;
         }
         return false;
@@ -122,6 +121,7 @@ public class CallLogPlugin extends CordovaPlugin {
 
             }
             cursor.close();
+			callbackContext.success(toJsonArray(callInfoList));
         } catch (Exception e) {
             e.printStackTrace();
         }
