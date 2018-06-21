@@ -9,7 +9,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CallLog;
 import android.support.v4.content.ContextCompat;
-import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.mylhyl.acp.Acp;
@@ -53,6 +52,7 @@ public class CallLogPlugin extends CordovaPlugin {
         if (action.equals("getCallLog")) {
             callNumber = args.getString(0);
             initData(callNumber);
+
             return true;
         }
         return false;
@@ -92,62 +92,36 @@ public class CallLogPlugin extends CordovaPlugin {
             }
             Cursor cursor = cr.query(uri, projection, null, null, CallLog.Calls.DATE + " DESC");
             while (cursor.moveToNext()) {
-                callInfoLog = new CallInfoLog();
-                String number = cursor.getString(0);//电话号码
-                long date = cursor.getLong(1);//通话时间
-                int type = cursor.getInt(2);//通话类型
-                String name = cursor.getString(3);//名字
-                String duration = cursor.getString(4);//通话时长
-                String areaCode = cursor.getString(5);//归属地
-                String callTime = TransitionTime.convertTimeFirstStyle(date);
-                if (TransitionTime.getTodayData().equals(callTime) && number.equals(callNumber) && !duration.equals("0") && type == 2) {//如果是今天的话,通话时长>0的,去电,通话记录
-                    callInfoLog.setNumber(number);
-                    callInfoLog.setDate(date);
-                    callInfoLog.setType(type);
-                    callInfoLog.setName(name);
-                    callInfoLog.setCountType(1);
-                    callInfoLog.setDuration(duration);
-                    callInfoLog.setCode(areaCode);
-                    //筛选数据
-                    if (TextUtils.isEmpty(number)) {
-                        callInfoList.add(callInfoLog);
-                        continue;
-                    }
-                    boolean isadd = screenData(callInfoList, callInfoLog);
-                    if (isadd) {
+                if (callInfoList.size() == 0) {
+                    callInfoLog = new CallInfoLog();
+                    String number = cursor.getString(0);//电话号码
+                    long date = cursor.getLong(1);//通话时间
+                    int type = cursor.getInt(2);//通话类型
+                    String name = cursor.getString(3);//名字
+                    String duration = cursor.getString(4);//通话时长
+                    String areaCode = cursor.getString(5);//归属地
+                    String callTime = TransitionTime.convertTimeFirstStyle(date);
+                    if (TransitionTime.getTodayData().equals(callTime) && number.equals(callNumber) && !duration.equals("0") && type == 2) {//如果是今天的话,通话时长>0的,去电,通话记录
+                        callInfoLog.setNumber(number);
+                        callInfoLog.setDate(date);
+                        callInfoLog.setType(type);
+                        callInfoLog.setName(name);
+                        callInfoLog.setCountType(1);
+                        callInfoLog.setDuration(duration);
+                        callInfoLog.setCode(areaCode);
+                        //添加数据
                         callInfoList.add(callInfoLog);
                     }
+                } else {
+                    break;
                 }
 
             }
             cursor.close();
-			callbackContext.success(toJsonArray(callInfoList));
+            callbackContext.success(toJsonArray(callInfoList));
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * 筛选数据
-     *
-     * @param callInfoList
-     * @param info
-     * @return
-     */
-    private boolean screenData(List<CallInfoLog> callInfoList, CallInfoLog info) {
-        if (callInfoList.size() > 0) {
-            for (int i = 0; i < callInfoList.size(); i++) {
-                CallInfoLog callInfoLog = callInfoList.get(i);
-                //                callInfoLog = callInfoLogs.get(i);
-                //如果说是日期和类型全部一样的话那么这个通话记录就不要,变成一个数量归为最近一次记录里面
-                if (callInfoLog.getCallTime().equals(info.getCallTime()) && callInfoLog.getType() == info.getType() && callInfoLog.getNumber().equals(info.getNumber())) {
-                    callInfoLog.setCountType(callInfoLog.getCountType() + 1);//递增一次
-                    //结束这次数据查找
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
 
@@ -162,6 +136,7 @@ public class CallLogPlugin extends CordovaPlugin {
         JSONArray jsonArray = new JSONArray();
         JSONObject tmpObj = null;
         int count = callInfoList.size();
+
         for (int i = 0; i < count; i++) {
             tmpObj = new JSONObject();
             tmpObj.put("CallDate", TransitionTime.convertTimeFirstStyle(callInfoList.get(i).getDate()));
@@ -171,9 +146,8 @@ public class CallLogPlugin extends CordovaPlugin {
         }
 
         // 将JSONArray转换得到String
-        // String callLogInfos = jsonArray.toString();
-		
-        // Toast.makeText(activity,callLogInfos,Toast.LENGTH_LONG).show();
+        //        String callLogInfos = jsonArray.toString();
+        //        Toast.makeText(activity,callLogInfos,Toast.LENGTH_LONG).show();
 
         return jsonArray;
 
