@@ -139,7 +139,8 @@ public class CallLogPlugin extends CordovaPlugin {
 
         for (int i = 0; i < count; i++) {
             tmpObj = new JSONObject();
-            tmpObj.put("CallDate", TransitionTime.convertTimeFirstStyle(callInfoList.get(i).getDate()));
+            tmpObj.put("CallDate", TransitionTime.formatData(callInfoList.get(i).getDate()));
+            tmpObj.put("CallDateTypeOfLong", callInfoList.get(i).getDate());
             tmpObj.put("Duration", callInfoList.get(i).getDuration());
             jsonArray.put(tmpObj);
             tmpObj = null;
@@ -148,6 +149,7 @@ public class CallLogPlugin extends CordovaPlugin {
         // 将JSONArray转换得到String
         //        String callLogInfos = jsonArray.toString();
         //        Toast.makeText(activity,callLogInfos,Toast.LENGTH_LONG).show();
+		
 
         return jsonArray;
 

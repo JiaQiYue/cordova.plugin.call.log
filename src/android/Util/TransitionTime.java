@@ -112,6 +112,11 @@ public class TransitionTime {
 
     }
 
+    /**
+     * 日期年月日转化
+     * @param date
+     * @return
+     */
     public static String convertTimeFirstStyle(long date) {
 
         String strs = "";
@@ -152,10 +157,10 @@ public class TransitionTime {
      * @param time
      *
      */
-    public static String formatData(long time) {
+    public static String formatData(long date) {
 
-        SimpleDateFormat f = new SimpleDateFormat("HH:mm");
-        String callTime = f.format(time);
+        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String callTime = f.format(date);
         return callTime;
 
     }
